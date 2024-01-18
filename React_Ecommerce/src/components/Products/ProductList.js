@@ -3,7 +3,7 @@ import { productList } from "./data";
 import ProductCard from "./ProductCard";
 
 const ProductList = () => {
-    const [products,setProducts]=useState(productList)
+    const [products]=useState(productList)
     return (
         <>
             <h1>Product List</h1>
