@@ -6,7 +6,11 @@ const ProductCard = ({ productItem }) => {
   const { title, thumbnail, description, price, stock, rating } = productItem;
 
   const renderStockStatus = () => {
-    return <p className={`text-${stock > 0 ? 'success' : 'danger'}`}>{stock > 0 ? 'In Stock' : 'Out of Stock'}</p>;
+    return (
+      <p className={`text-${stock > 0 ? 'success' : 'danger'}`} style={{ fontWeight: 'bold' }}>
+        {stock > 0 ? 'In Stock' : 'Out of Stock'}
+      </p>
+    );
   };
 
   const renderRatingStars = () => {
@@ -43,10 +47,11 @@ const ProductCard = ({ productItem }) => {
         <Card.Text>${price}</Card.Text>
         <div className="rating">{renderRatingStars()}</div>
         <Button
-          variant={stock > 0 ? 'primary' : 'secondary'}
+          variant={stock > 0 ? 'outline-success' : 'outline-secondary'}
           disabled={stock === 0}
           onClick={() => console.log(`Add to Cart: ${title}`)}
           className="mt-auto"
+          style={{ fontSize: '0.8rem', borderRadius: '15px' }}
         >
           Add to Cart
         </Button>
