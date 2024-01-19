@@ -4,6 +4,7 @@ import Layout from '../LayOut/Layout'
 import ProductList from '../components/Products/ProductList';
 import Cart from '../pages/Cart';
 import NotFound from '../pages/NotFound';
+import ProductDetails from "../pages/ProductDetails";
 
 
 export default function Router() {
@@ -12,6 +13,7 @@ export default function Router() {
             <Route element={<Layout />}>
                 <Route path='' element={<ProductList />} />
                 <Route path='/cart' element={<Cart />} />
+                <Route path='/product/:id' element={<ProductDetails />} />
                 <Route path='*' element={<NotFound />} />
             </Route>
       
