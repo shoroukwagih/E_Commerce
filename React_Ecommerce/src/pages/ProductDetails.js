@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Card, Button, CardImg, CardBody } from "react-bootstrap";
+import { Card, Button} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { increaseCounter } from "../store/slices/counter";
 import { axiosInstance } from "../apis/config";
@@ -8,43 +8,80 @@ import { axiosInstance } from "../apis/config";
 
 const ProductDetails = () => {
           
-     const { id } = useParams();
-     const [product, setProduct] = useState({});
+     const { id , rating } = useParams();
+     const [product, setProduct] = useState({
+     });
      const dispatch = useDispatch();
      const cartList = useSelector((state) => state.counter.cartList);
+     const renderRatingStars = () => {
+          const fullStars = Math.floor(rating);
+          const halfStar = rating % 1 !== 0;
+          const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+
+          const stars = [];
+
+          for (let i = 0; i < fullStars; i++) {
+               stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>);
+          }
+
+          if (halfStar) {
+               stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
+          }
+
+          for (let i = 0; i < emptyStars; i++) {
+               stars.push(<i key={i + fullStars + 1} className="bi bi-star text-warning"></i>);
+          }
+
+          return stars;
+     };
+
 
      useEffect(() => {
-          const fetchProductDetails = async () => {
-               try {
-                    const response = await axiosInstance.get(`/${id}`);
-                    setProduct(response.data.product);
-               } catch (error) {
-                    console.error(" Error to find product details: ", error);
-               }
-          };
-          fetchProductDetails();
-     }, [id]);
+          axiosInstance
+               .get(`/${id}`)
+               .then((res) => setProduct(res.data))
+               .catch((err) => console.log(err));
+     }, []);
+  
 
+     
      const handleAddToCart = () => {
-          if (cartList.indexOf(product.id) === -1) {
+          if (product && product.id && cartList.indexOf(product.id) === -1) {
                dispatch(increaseCounter(product.id));
           }
      };
      
+
      return (
-          <div className="container my-4">
+          <div className="container my-2">
                <Card>
-                    <Card.Img variant="top" src={product.thumbnail} alt={product.title} />
+                    {product.thumbnail && (
+                         <Card.Img variant="top" src={product.thumbnail} alt={product.title} />
+                    )}
                     <Card.Body>
-                         <Card.Title>{product.title}</Card.Title>
-                         <Card.Text>{product.description}</Card.Text>
-                         <Card.Text>Price: ${product.price}</Card.Text>
-                         <Button
-                              variant={cartList.indexOf(product.id) === -1 ? 'success' : 'secondary'}
-                              onClick={handleAddToCart}
-                         >
-                              {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'In Cart'}
-                         </Button>
+                         {product.title ? (
+                              <Card.Title>{product.title}</Card.Title>
+                         ) : (
+                              <Card.Title>Loading...</Card.Title>
+                         )}
+                         {product.description && (
+                              <Card.Text>{product.description}</Card.Text>
+                         )}
+                         <div className="rating">{renderRatingStars()}</div>
+                         {product.price && (
+                              <Card.Text>Price: ${product.price}</Card.Text>
+                         )}
+                         {product.error ? (
+                              <Card.Text>Error: {product.error}</Card.Text>
+                         ) : (
+                              <Button
+                                   className={`btn-${cartList.indexOf(product.id) === -1 ? 'success' : 'secondary'
+                                        }`}
+                                   onClick={handleAddToCart}
+                              >
+                                   {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'In Cart'}
+                              </Button>
+                         )}
                     </Card.Body>
                </Card>
           </div>
