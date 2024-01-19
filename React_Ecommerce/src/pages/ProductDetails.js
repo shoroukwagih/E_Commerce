@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Card, Button} from "react-bootstrap";
+import { Card, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { increaseCounter } from "../store/slices/counter";
 import { axiosInstance } from "../apis/config";
+import "./ProductDetails.css";
 
 
 const ProductDetails = () => {
@@ -55,34 +56,38 @@ const ProductDetails = () => {
      return (
           <div className="container my-2">
                <Card>
-                    {product.thumbnail && (
-                         <Card.Img variant="top" src={product.thumbnail} alt={product.title} />
-                    )}
-                    <Card.Body>
-                         {product.title ? (
-                              <Card.Title>{product.title}</Card.Title>
-                         ) : (
-                              <Card.Title>Loading...</Card.Title>
-                         )}
-                         {product.description && (
-                              <Card.Text>{product.description}</Card.Text>
-                         )}
-                         <div className="rating">{renderRatingStars()}</div>
-                         {product.price && (
-                              <Card.Text>Price: ${product.price}</Card.Text>
-                         )}
-                         {product.error ? (
-                              <Card.Text>Error: {product.error}</Card.Text>
-                         ) : (
-                              <Button
-                                   className={`btn-${cartList.indexOf(product.id) === -1 ? 'success' : 'secondary'
-                                        }`}
-                                   onClick={handleAddToCart}
-                              >
-                                   {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'In Cart'}
-                              </Button>
-                         )}
-                    </Card.Body>
+                    <Row>
+                         <Col xs={12} md={6}>
+                              {product.thumbnail && (
+                                   <Card.Img variant="top" src={product.thumbnail} alt={product.title} className="main-thumbnail" />
+                              )}
+                              <Row className="additional-thumbnails">
+                                   {/* Render four additional thumbnails here */}
+                              </Row>
+                         </Col>
+                         <Col xs={12} md={6}>
+                              <Card.Body>
+                                   {product.title ? (
+                                        <Card.Title className="product-title">{product.title}</Card.Title>
+                                   ) : (
+                                        <Card.Title>Loading...</Card.Title>
+                                   )}
+                                   {product.description && <Card.Text className="product-description">{product.description}</Card.Text>}
+                                   <div className="rating">{renderRatingStars()}</div>
+                                   {product.price && <Card.Text>Price: ${product.price}</Card.Text>}
+                                   {product.error ? (
+                                        <Card.Text>Error: {product.error}</Card.Text>
+                                   ) : (
+                                        <Button
+                                             className={`btn-${cartList.indexOf(product.id) === -1 ? 'success' : 'secondary'}`}
+                                             onClick={handleAddToCart}
+                                        >
+                                             {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'In Cart'}
+                                        </Button>
+                                   )}
+                              </Card.Body>
+                         </Col>
+                    </Row>
                </Card>
           </div>
      );
