@@ -4,16 +4,12 @@ import ProductCard from "./ProductCard";
 import { axiosInstance } from "../../apis/config";
 
 const ProductList = () => {
-    const [product, setPoducts] = useState([]);
+    const [product, setProducts] = useState([]);
 
   useEffect(() => {
     axiosInstance
-      .get("" , {
-        params : {
-            title : 'super'
-        }
-      })
-      .then((res) => setPoducts(res.data.products))
+      .get("")
+      .then((res) => setProducts(res.data.products))
       .catch((err) => console.log(err));
   }, []);
   ////////////////////////////////////
