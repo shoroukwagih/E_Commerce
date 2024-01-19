@@ -4,11 +4,14 @@ import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { decreaseCounter, increaseCounter } from "../../store/slices/counter";
 import { useSelector, useDispatch } from "react-redux";
+import { Link } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const ProductCard = ({ productItem }) => {
   const { id, title, thumbnail, description, price, stock, rating } = productItem;
   const cartList = useSelector((state) => state.counter.cartList);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const renderStockStatus = () => {
     return (
@@ -51,7 +54,9 @@ const ProductCard = ({ productItem }) => {
   return (
     <Card style={{ width: '18rem', height: '100%' }} className="d-flex flex-column">
       <div style={{ position: 'relative', overflow: 'hidden', height: '200px' }}>
-        <Card.Img style={{ objectFit: 'cover', width: '100%', height: '100%' }} variant="top" src={thumbnail} alt={title} />
+        <Link to={`/product/${id}`}>
+          <Card.Img style={{ objectFit: 'cover', width: '100%', height: '100%' }} variant="top" src={thumbnail} alt={title} />
+        </Link>
       </div>
       <Card.Body className="d-flex flex-column">
         {renderStockStatus()}
@@ -68,6 +73,15 @@ const ProductCard = ({ productItem }) => {
         >
           {cartList.indexOf(id) === -1 ? "Add To Cart" : "Remove From Cart"}
         </Button>
+        <button
+          type="button"
+          className="btn btn-danger mt-3"
+          style={{ fontSize: '0.8rem', borderRadius: '15px' }}
+          onClick={() => navigate(`/product/${productItem.id}`)}
+        >
+          More Details
+        </button>
+        
       </Card.Body>
     </Card>
   );
