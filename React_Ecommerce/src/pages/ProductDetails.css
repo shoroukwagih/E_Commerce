@@ -1,0 +1,30 @@
+
+.main-thumbnail {
+     width: 100%;
+     /* Adjust the width as needed */
+     height: auto;
+     /* Maintain the aspect ratio */
+}
+
+.additional-thumbnails {
+     margin-top: 10px;
+     /* Adjust the margin as needed */
+}
+
+.product-title {
+     font-weight: bold;
+     font-size: 1.5rem;
+     /* Adjust the font size as needed */
+}
+
+.product-description {
+     margin-top: 10px;
+     /* Adjust the margin as needed */
+}
+
+.rating {
+     color: gold;
+     /* Set the color for the rating stars */
+}
+
+/* Add more styles as needed based on your design */
