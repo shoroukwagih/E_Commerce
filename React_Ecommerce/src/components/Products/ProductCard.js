@@ -1,9 +1,14 @@
+// ProductCard.js
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import { decreaseCounter, increaseCounter } from "../../store/slices/counter";
+import { useSelector, useDispatch } from "react-redux";
 
 const ProductCard = ({ productItem }) => {
-  const { title, thumbnail, description, price, stock, rating } = productItem;
+  const { id, title, thumbnail, description, price, stock, rating } = productItem;
+  const cartList = useSelector((state) => state.counter.cartList);
+  const dispatch = useDispatch();
 
   const renderStockStatus = () => {
     return (
@@ -35,6 +40,14 @@ const ProductCard = ({ productItem }) => {
     return stars;
   };
 
+  const handleButtonClick = () => {
+    if (cartList.indexOf(id) === -1) {
+      dispatch(increaseCounter(id));
+    } else {
+      dispatch(decreaseCounter(id));
+    }
+  };
+
   return (
     <Card style={{ width: '18rem', height: '100%' }} className="d-flex flex-column">
       <div style={{ position: 'relative', overflow: 'hidden', height: '200px' }}>
@@ -49,11 +62,11 @@ const ProductCard = ({ productItem }) => {
         <Button
           variant={stock > 0 ? 'outline-success' : 'outline-secondary'}
           disabled={stock === 0}
-          onClick={() => console.log(`Add to Cart: ${title}`)}
+          onClick={handleButtonClick}
           className="mt-auto"
           style={{ fontSize: '0.8rem', borderRadius: '15px' }}
         >
-          Add to Cart
+          {cartList.indexOf(id) === -1 ? "Add To Cart" : "Remove From Cart"}
         </Button>
       </Card.Body>
     </Card>
@@ -61,3 +74,4 @@ const ProductCard = ({ productItem }) => {
 };
 
 export default ProductCard;
+

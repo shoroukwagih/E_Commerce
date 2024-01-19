@@ -1,13 +1,12 @@
+
+
 import { configureStore } from "@reduxjs/toolkit";
-import counterSlice from "./slices/counter";
-export default configureStore({
+import counterReducer from "./slices/counter";
+
+export const store = configureStore({
   reducer: {
-    counter: counterSlice,
+    counter: counterReducer,
   },
 });
 
-// configureStore => reducer
-// Slice => name, initialState, reducers
-// reducers => function => state, action => update state
-// from slice => export const {ReducerFunctions} = slice.actions => component
-// from slice => export default slice.reducer => configureStore
+export default store;

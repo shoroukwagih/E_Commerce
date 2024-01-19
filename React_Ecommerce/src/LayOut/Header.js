@@ -3,8 +3,11 @@ import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const counter_val = useSelector((state) => state.counter.counter_val);
+
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
@@ -18,9 +21,13 @@ const Header = () => {
               Product List
             </Link>
             <Link to="/cart" className="nav-link text-dark fs-4 me-2">
-             <i class="fa-solid fa-cart-shopping"></i>
+              <i className="fas fa-shopping-cart"></i>
             </Link>
+
           </Nav>
+          <span className='border px-2'>
+            {counter_val}
+          </span>
         </Navbar.Collapse>
       </Container>
     </Navbar>

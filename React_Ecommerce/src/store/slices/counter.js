@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const INITIAL_STATE = {
   counter_val: 0,
-  watchList: [],
+  cartList: [],
 };
 
 const counterSlice = createSlice({
@@ -11,15 +11,15 @@ const counterSlice = createSlice({
   reducers: {
     increaseCounter: (state, action) => {
       state.counter_val = state.counter_val + 1;
-      state.watchList.push(action.payload);
-      console.log(state.watchList.length);
+      state.cartList.push(action.payload);
+      console.log(state.cartList.length);
     },
     decreaseCounter: (state, action) => {
       state.counter_val = state.counter_val - 1;
-      const index = state.watchList.indexOf(action.payload);
+      const index = state.cartList.indexOf(action.payload);
       if (index !== -1) {
-        state.watchList.splice(index, 1);
-        console.log(state.watchList.length);
+        state.cartList.splice(index, 1);
+        console.log(state.cartList.length);
       }
     },
   },
