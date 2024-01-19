@@ -11,7 +11,6 @@ export default function Router() {
         <Routes>
             <Route element={<Layout />}>
                 <Route path='' element={<ProductList />} />
-                {/* <Route path='/product-details/:id' element={<GameDetails />} /> */}
                 <Route path='/cart' element={<Cart />} />
                 <Route path='*' element={<NotFound />} />
             </Route>

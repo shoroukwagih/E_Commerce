@@ -18,7 +18,7 @@ const Header = () => {
               Product List
             </Link>
             <Link to="/cart" className="nav-link text-dark fs-4 me-2">
-              Cart
+             <i class="fa-solid fa-cart-shopping"></i>
             </Link>
           </Nav>
         </Navbar.Collapse>

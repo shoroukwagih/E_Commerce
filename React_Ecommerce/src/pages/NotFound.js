@@ -1,10 +1,9 @@
- 
+import exampleImage from "../assest/image/notFound.jpg";
+
 export default function NotFound(){
     return(
         <>
-        <h1>
-            NotFound 
-        </h1>
+        <img src={exampleImage} alt="notfound"/>
         </>
     )
 }
