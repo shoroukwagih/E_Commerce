@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { increaseCounter } from "../store/slices/counter";
+import { increaseQuantity, decreaseQuantity } from '../store/slices/quantity';
+import { increaseCounter , decreaseCounter } from "../store/slices/counter";
 import { axiosInstance } from "../apis/config";
 import "./ProductDetails.css";
 
 
 const ProductDetails = () => {
-
      const { id, rating } = useParams();
      const [product, setProduct] = useState({
      });
@@ -45,12 +45,19 @@ const ProductDetails = () => {
      
 
 
-
      const handleAddToCart = () => {
-          if (product && product.id && cartList.indexOf(product.id) === -1) {
-               dispatch(increaseCounter(product.id));
+          if (product.id) {
+            if (cartList.indexOf(product.id) === -1) {
+              dispatch(increaseCounter(product.id));
+              dispatch(increaseQuantity({ id: product.id, title: product.title, description: product.description, thumbnail: product.thumbnail, price: product.price, quantity: 1 }));
+            } else {
+              dispatch(decreaseCounter(product.id));
+              dispatch(decreaseQuantity({ id: product.id, quantity: 1 }));
+            }
+          } else {
+            console.error("Product details are not available yet.");
           }
-     };
+        };
 
 
      return (
@@ -98,10 +105,10 @@ const ProductDetails = () => {
                                         <Card.Text>Error: {product.error}</Card.Text>
                                    ) : (
                                         <Button
-                                             className={`btn-${cartList.indexOf(product.id) === -1 ? 'success' : 'secondary'}`}
+                                             className={`btn-${cartList.indexOf(product.id) === -1 ? 'success' : 'danger'}`}
                                              onClick={handleAddToCart}
                                         >
-                                             {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'In Cart'}
+                                             {cartList.indexOf(product.id) === -1 ? 'Add to Cart' : 'Remove In Cart'}
                                         </Button>
                                    )}
                               </Card.Body>

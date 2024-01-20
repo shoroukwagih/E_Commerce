@@ -3,6 +3,7 @@ import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import { decreaseCounter, increaseCounter } from "../../store/slices/counter";
+import { increaseQuantity, decreaseQuantity } from '../../store/slices/quantity';
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from 'react-router-dom'; 
 import { useNavigate } from 'react-router-dom';
@@ -46,8 +47,11 @@ const ProductCard = ({ productItem }) => {
   const handleButtonClick = () => {
     if (cartList.indexOf(id) === -1) {
       dispatch(increaseCounter(id));
+      dispatch(increaseQuantity({ id, title,description, thumbnail, price, quantity: 1 }));
+
     } else {
       dispatch(decreaseCounter(id));
+      dispatch(decreaseQuantity({ id, quantity: 1 }));
     }
   };
 
@@ -75,7 +79,7 @@ const ProductCard = ({ productItem }) => {
         </Button>
         <button
           type="button"
-          className="btn btn-danger mt-3"
+          className="btn bg-success  text-light mt-3"
           style={{ fontSize: '0.8rem', borderRadius: '15px' }}
           onClick={() => navigate(`/product/${productItem.id}`)}
         >
