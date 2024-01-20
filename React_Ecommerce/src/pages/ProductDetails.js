@@ -62,10 +62,10 @@ const ProductDetails = () => {
                     <Row>
                          <Col xs={12} md={6}>
                               {product.thumbnail && (
-                                   <Card.Img variant="top" src={product.thumbnail} alt={product.title} className="main-thumbnail" />
+                                   <Card.Img variant="top" src={product.thumbnail} alt={product.title} className="main-thumbnail mb-4" />
                               )}
 
-                              <Row className="small-thumbnails">
+                              <Row className="small-thumbnails ms-2">
                                    {product.images &&
                                         product.images.slice(0, 4).map((thumb, index) => (
                                              <Col key={index} xs={3} className="small-thumbnail">
@@ -77,7 +77,7 @@ const ProductDetails = () => {
                          <Col xs={12} md={6}>
                               <Card.Body>
                                    {product.title ? (
-                                        <Card.Title className="product-title">{product.title}</Card.Title>
+                                        <Card.Title className="product-title fs-1 fw-bold">{product.title}</Card.Title>
                                    ) : (
                                         <Card.Title>Loading...</Card.Title>
                                    )}
