@@ -13,7 +13,7 @@ const PaginatedList = ({ paginationFun }) => {
   return (
     <div>
       <Pagination>
-        {Array.from({ length: 5 }).map(
+        {Array.from({ length: 10 }).map(
           (_, index) => (
             <Pagination.Item
               key={index + 1}

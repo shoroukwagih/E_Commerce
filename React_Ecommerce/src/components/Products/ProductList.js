@@ -2,18 +2,18 @@ import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import { axiosInstance } from "../../apis/config";
 import Paginations from "./Pagination";
-
-
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
-
+import Dropdown from 'react-bootstrap/Dropdown';
 
 const ProductList = () => {
-  const [product, setProducts] = useState([]);
+  const [products, setProducts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 6;
-  const [categories,setCategories]= useState([])
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     axiosInstance
@@ -22,89 +22,93 @@ const ProductList = () => {
       .catch((err) => console.log(err));
   }, []);
 
+  useEffect(() => {
+    axiosInstance.get('/categories')
+      .then((response) => {
+        setCategories(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, []);
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = product.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
   };
 
-  ///////////////////Abdelrahman Ahmed/////////////////
-  useEffect(() => {
-    axiosInstance.get('/categories')
-    .then((response)=>{
-        setCategories(response.data);
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
-}, [])
-
-
-
-  const listProducts = (categoryName) =>{
-    axiosInstance.get('/category/'+ categoryName)
-    .then((response)=>{
+  const listProducts = (categoryName) => {
+    axiosInstance.get('/category/' + categoryName)
+      .then((response) => {
         setProducts(response.data.products);
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
+        setSelectedCategory(categoryName);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
-  const listallproducts=() =>{
-    
+  const listAllProducts = () => {
     axiosInstance.get("")
-    .then((response)=>{
+      .then((response) => {
         setProducts(response.data.products);
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
-}
-  
-  
-  const search = (findher) => {
-    
-    axiosInstance.get('/search?q='+findher )
-    .then((response)=>{
-        
-        setProducts(response.data.products);
-    })
-    .catch((error)=>{
-        console.log(error)
-    });
-} 
+        setSelectedCategory(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
-/////////////////////////////////////////////////////
+  const handleSearch = () => {
+    axiosInstance.get('/search?q=' + searchTerm)
+      .then((response) => {
+        setProducts(response.data.products);
+        setSelectedCategory(null);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <>
-      <h1>Product List</h1>
+      <h1 style={{ textAlign: "center" }}>Product List</h1>
       <hr />
 
-      {/*////////////////////////Abdelrahman Ahmed//////////////////////////////////////*/ }
-      <InputGroup className="mb-3" style={{alignItems:"center"}}>
-                <InputGroup.Text style={{position:"relative" ,left:"10px"}} id="basic-addon1" >Search Bar</InputGroup.Text>
-                <Form.Control
-                style={{marginRight:"20px", position:"relative" ,left:"10px"}}
-                    placeholder="Write her to search for what you need"
-                    aria-label="Username"
-                    aria-describedby="basic-addon1"
-                    onChange={(e)=>search(e.target.value)} 
-                />
-            </InputGroup> 
+      <div className="container">
+        <InputGroup className="mb-3">
+          <Form.Control
+            style={{ borderRadius: "10px" }}
+            placeholder="Search for products..."
+            aria-label="Search"
+            aria-describedby="basic-addon1"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <Button variant="success" onClick={handleSearch}>Search</Button>
+        </InputGroup>
+      </div>
 
-            {categories.map(category=>
-               <Button style={{margin: "10px" }} variant="primary" onClick={()=>listProducts(category)}>{category}</Button>
-               )
-            }
+      <div className="container mt-3 mb-3">
+        <Dropdown>
+          <Dropdown.Toggle variant="success" id="dropdown-categories">
+            {selectedCategory ? selectedCategory : "Select Category"}
+          </Dropdown.Toggle>
 
-            <Button variant="success" onClick={()=>listallproducts()}>All product</Button>
-
-
-            {/*//////////////////////////////////////////////////////////////////*/ }
+          <Dropdown.Menu>
+            {categories.map((category) => (
+              <Dropdown.Item key={category} onClick={() => listProducts(category)}>
+                {category}
+              </Dropdown.Item>
+            ))}
+            <Dropdown.Divider />
+            <Dropdown.Item onClick={listAllProducts}>All Products</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
 
       <div className="container">
         <div className="row g-4">
