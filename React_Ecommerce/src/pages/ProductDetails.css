@@ -10,6 +10,14 @@
      margin-top: 10px;
      /* Adjust the margin as needed */
 }
+.additional-thumbnail {
+     width: 100%;
+     /* Adjust the width as needed for additional thumbnails */
+     height: auto;
+     /* Maintain the aspect ratio for additional thumbnails */
+     margin-bottom: 10px;
+     /* Adjust the margin as needed for additional thumbnails */
+}
 
 .product-title {
      font-weight: bold;

@@ -8,8 +8,8 @@ import "./ProductDetails.css";
 
 
 const ProductDetails = () => {
-          
-     const { id , rating } = useParams();
+
+     const { id, rating } = useParams();
      const [product, setProduct] = useState({
      });
      const dispatch = useDispatch();
@@ -18,7 +18,6 @@ const ProductDetails = () => {
           const fullStars = Math.floor(rating);
           const halfStar = rating % 1 !== 0;
           const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-
           const stars = [];
 
           for (let i = 0; i < fullStars; i++) {
@@ -43,15 +42,16 @@ const ProductDetails = () => {
                .then((res) => setProduct(res.data))
                .catch((err) => console.log(err));
      }, []);
-  
-
      
+
+
+
      const handleAddToCart = () => {
           if (product && product.id && cartList.indexOf(product.id) === -1) {
                dispatch(increaseCounter(product.id));
           }
      };
-     
+
 
      return (
           <div className="container my-2">
@@ -61,9 +61,16 @@ const ProductDetails = () => {
                               {product.thumbnail && (
                                    <Card.Img variant="top" src={product.thumbnail} alt={product.title} className="main-thumbnail" />
                               )}
-                              <Row className="additional-thumbnails">
-                                   {/* Render four additional thumbnails here */}
+
+                              <Row className="small-thumbnails">
+                                   {product.images &&
+                                        product.images.slice(0, 4).map((thumb, index) => (
+                                             <Col key={index} xs={3} className="small-thumbnail">
+                                                  <img src={thumb} alt={`Thumbnail ${index + 1}`} className="img-fluid" />
+                                             </Col>
+                                        ))}
                               </Row>
+
                          </Col>
                          <Col xs={12} md={6}>
                               <Card.Body>
@@ -73,8 +80,20 @@ const ProductDetails = () => {
                                         <Card.Title>Loading...</Card.Title>
                                    )}
                                    {product.description && <Card.Text className="product-description">{product.description}</Card.Text>}
-                                   <div className="rating">{renderRatingStars()}</div>
-                                   {product.price && <Card.Text>Price: ${product.price}</Card.Text>}
+
+                                   <div className="rating">
+                                        {renderRatingStars()}
+                                   </div>
+                                   
+                                   {product.price && (
+                                        <>
+                                             <Card.Text>Price: ${product.price}</Card.Text>
+                                             {product.discountPercentage && (
+                                                  <Card.Text>Discount: {product.discountPercentage}%</Card.Text>
+                                             )}
+                                        </>
+                                   )}
+
                                    {product.error ? (
                                         <Card.Text>Error: {product.error}</Card.Text>
                                    ) : (
@@ -92,5 +111,5 @@ const ProductDetails = () => {
           </div>
      );
 };
-     
+
 export default ProductDetails;
