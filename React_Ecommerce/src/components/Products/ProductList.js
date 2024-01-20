@@ -94,7 +94,7 @@ const ProductList = () => {
 
       <div className="container mt-3 mb-3">
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-categories">
+          <Dropdown.Toggle variant="primary" id="dropdown-categories">
             {selectedCategory ? selectedCategory : "Select Category"}
           </Dropdown.Toggle>
 
