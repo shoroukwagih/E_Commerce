@@ -1,3 +1,4 @@
+// ProductDetails.js
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { Card, Button, Row, Col } from "react-bootstrap";
@@ -7,34 +8,32 @@ import { increaseCounter , decreaseCounter } from "../store/slices/counter";
 import { axiosInstance } from "../apis/config";
 import "./ProductDetails.css";
 
+const renderRatingStars = (rating) => {
+  const fullStars = Math.floor(rating);
+  const halfStar = rating % 1 !== 0;
+  const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+  const stars = [];
+
+  for (let i = 0; i < fullStars; i++) {
+    stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>);
+  }
+
+  if (halfStar) {
+    stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
+  }
+
+  for (let i = 0; i < emptyStars; i++) {
+    stars.push(<i key={i + fullStars + 1} className="bi bi-star text-warning"></i>);
+  }
+
+  return stars;
+};
 
 const ProductDetails = () => {
-     const { id, rating } = useParams();
-     const [product, setProduct] = useState({
-     });
+     const { id } = useParams();
+     const [product, setProduct] = useState({});
      const dispatch = useDispatch();
      const cartList = useSelector((state) => state.counter.cartList);
-     const renderRatingStars = () => {
-          const fullStars = Math.floor(rating);
-          const halfStar = rating % 1 !== 0;
-          const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-          const stars = [];
-
-          for (let i = 0; i < fullStars; i++) {
-               stars.push(<i key={i} className="bi bi-star-fill text-warning"></i>);
-          }
-
-          if (halfStar) {
-               stars.push(<i key="half" className="bi bi-star-half text-warning"></i>);
-          }
-
-          for (let i = 0; i < emptyStars; i++) {
-               stars.push(<i key={i + fullStars + 1} className="bi bi-star text-warning"></i>);
-          }
-
-          return stars;
-     };
-
 
      useEffect(() => {
           axiosInstance
@@ -42,8 +41,6 @@ const ProductDetails = () => {
                .then((res) => setProduct(res.data))
                .catch((err) => console.log(err));
      }, []);
-     
-
 
      const handleAddToCart = () => {
           if (product.id) {
@@ -58,7 +55,6 @@ const ProductDetails = () => {
             console.error("Product details are not available yet.");
           }
         };
-
 
      return (
           <div className="container my-2">
@@ -77,7 +73,6 @@ const ProductDetails = () => {
                                              </Col>
                                         ))}
                               </Row>
-
                          </Col>
                          <Col xs={12} md={6}>
                               <Card.Body>
@@ -89,9 +84,9 @@ const ProductDetails = () => {
                                    {product.description && <Card.Text className="product-description">{product.description}</Card.Text>}
 
                                    <div className="rating">
-                                        {renderRatingStars()}
+                                        {renderRatingStars(product.rating)}
                                    </div>
-                                   
+
                                    {product.price && (
                                         <>
                                              <Card.Text>Price: ${product.price}</Card.Text>
